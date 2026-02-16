@@ -1,0 +1,100 @@
+:root {
+    --bg: #010101;
+    --blue: #00f2ff;
+    --blue-glow: rgba(0, 242, 255, 0.4);
+    --red: #ff0055;
+    --black: #1a1a1a;
+    --border: rgba(255, 255, 255, 0.08);
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0; background: var(--bg); color: white;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex; flex-direction: column; height: 100vh;
+    overflow: hidden; align-items: center; justify-content: center;
+}
+
+/* --- Immersive Background --- */
+.bg-vortex {
+    position: absolute; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, #0a0a0a 0%, #010101 100%);
+    z-index: -2;
+}
+
+body::before {
+    content: ""; position: absolute; width: 200%; height: 200%;
+    top: -50%; left: -50%;
+    background-image: linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(1000px) rotateX(65deg);
+    animation: gridMove 30s linear infinite;
+    z-index: -1;
+}
+
+@keyframes gridMove { from { transform: perspective(1000px) rotateX(65deg) translateY(0); } to { transform: perspective(1000px) rotateX(65deg) translateY(60px); } }
+
+/* --- Global Controls (Music, Sound, Restart) --- */
+.top-controls {
+    position: fixed; top: 30px; right: 40px;
+    display: flex; gap: 25px; z-index: 1000;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 12px 25px; border-radius: 50px;
+    border: 1px solid var(--border); backdrop-filter: blur(10px);
+}
+
+.icon-btn {
+    font-size: 1.2rem; cursor: pointer; opacity: 0.6;
+    transition: 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    display: flex; align-items: center; justify-content: center;
+}
+.icon-btn:hover { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 10px var(--blue)); }
+.icon-btn.muted { opacity: 0.3; filter: grayscale(1); }
+
+/* --- Aesthetic Entry Screen --- */
+.entry-container { text-align: center; z-index: 100; animation: fadeIn 1.5s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.logo-main {
+    font-size: 5rem; font-weight: 800; letter-spacing: -5px; margin: 0;
+    background: linear-gradient(to bottom, #fff 40%, var(--blue));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.3));
+}
+
+.subtitle {
+    font-family: 'Fira Code', monospace; font-size: 0.7rem;
+    letter-spacing: 10px; color: var(--blue); text-transform: uppercase;
+    margin-bottom: 50px; opacity: 0.7;
+}
+
+.level-selector { display: flex; gap: 20px; justify-content: center; perspective: 1000px; }
+.level-card {
+    background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
+    padding: 30px 20px; border-radius: 24px; width: 140px;
+    cursor: pointer; transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative; overflow: hidden;
+}
+.level-card:hover { transform: translateZ(30px) translateY(-10px); border-color: var(--blue); background: rgba(0, 242, 255, 0.05); box-shadow: 0 15px 40px rgba(0, 242, 255, 0.15); }
+
+/* --- Arena & Gameplay --- */
+#arena { width: 100%; max-width: 1200px; height: 400px; display: flex; align-items: center; justify-content: center; position: relative; }
+.mid-line { position: absolute; left: 50%; height: 250px; width: 2px; background: var(--blue); box-shadow: 0 0 40px var(--blue); z-index: 5; transform: translateX(-50%); }
+.game-container { display: flex; align-items: center; position: relative; transition: transform 0.05s linear; }
+.rope { width: 650px; height: 16px; background: #222; border-radius: 10px; position: relative; z-index: 1; margin: 0 -25px; box-shadow: 0 0 20px black; }
+.character { font-size: 130px; position: relative; z-index: 2; margin-top: -60px; filter: drop-shadow(0 0 20px black); }
+.blue-team { color: var(--blue); transform: scaleX(-1) rotate(-15deg); text-shadow: 0 0 40px var(--blue); }
+.black-team { color: var(--black); transform: rotate(15deg); filter: grayscale(1) brightness(0.3); }
+
+.pulling { animation: strain 0.25s infinite alternate; }
+@keyframes strain { from { transform: scaleX(-1) rotate(-15deg); } to { transform: scaleX(-1) rotate(-22deg) translateX(5px); } }
+
+.input-zone { margin-top: 20px; text-align: center; }
+#question { font-size: 5rem; font-weight: 900; color: white; margin-bottom: 10px; }
+#ans-input { background: #000; border: 2px solid var(--border); color: var(--blue); font-size: 4rem; width: 220px; text-align: center; border-radius: 30px; outline: none; transition: 0.3s; }
+#ans-input:focus { border-color: var(--blue); box-shadow: 0 0 40px var(--blue-glow); }
+
+.hidden { display: none !important; }
+.victory-jump { animation: jump 0.5s infinite; }
+@keyframes jump { 0%, 100% { transform: scaleX(-1) translateY(0); } 50% { transform: scaleX(-1) translateY(-100px); } }
